@@ -37,8 +37,34 @@ ir.watch(function(err, value){
 			counter++;
 			console.log(counter);
 			debounce(1000, function(){          //wait after last drop to do this
-				io.emit('msg', counter);
-				console.log("SEND DATA");
+				//Do the api call, and emit the return value
+				//http://sanyiubuntu.westeurope.cloudapp.azure.com/trashevent
+var optionsget = {
+    host : 'sanyiubuntu.westeurope.cloudapp.azure.com',
+    port : 80,
+    path : '/trashevent/'+counter,
+    method : 'GET'
+};
+
+var reqGet = http.request(optionsget, function(res) {
+    res.on('data', function(d) {
+	console.log("DATA PURE:" + d);
+	//console.log("DAtA FORMAT: " + data);
+	const buff = new Buffer(d);
+
+	var data = buff.toString();
+	//data = JSON.stringify(d);
+        io.emit('msg', data);
+	console.log("SEND DATA");
+	//console.log("CODE - " + d);
+    });
+});
+reqGet.end();
+reqGet.on('error', function(e) {
+    console.error(e);
+});
+				//io.emit('msg', counter);
+				//console.log("SEND DATA");
 			});
 			lastTime = currentTime;
 		}

@@ -25,9 +25,10 @@
                 var socket = io('192.168.1.186:3000');
 
                 socket.on('msg', function(count) {
-                    document.getElementById("counter").innerHTML = count;
+			var ret = JSON.parse(count);
+                    document.getElementById("counter").innerHTML = ret.code;
 
-                    qrcode.makeCode('Your point is' + count);
+                    qrcode.makeCode('Your point is' + ret.code);
                 });
 
         </script>
