@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+    <head>
+        <style type="text/css">
+            #qrcode {
+                width:160px;
+                height:160px;
+                margin-top:15px;
+            } 
+      </style>
+    </head>
+    <body>
+        <h1 id="counter">0</h1>
+        <div id="qrcode"></div>
+
+
+
+
+
+        <script src="http://davidshimjs.github.com/qrcodejs/qrcode.min.js" type="text/javascript"></script>
+        <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+
+        <script type='text/javascript'>
+                var qrcode = new QRCode("qrcode");
+                var socket = io('192.168.1.186:3000');
+
+                socket.on('msg', function(count) {
+                    document.getElementById("counter").innerHTML = count;
+
+                    qrcode.makeCode('Your point is' + count);
+                });
+
+        </script>
+    </body>
+</html>
+

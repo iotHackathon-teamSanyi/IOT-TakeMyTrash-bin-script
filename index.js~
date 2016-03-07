@@ -1,0 +1,15 @@
+var Gpio = require('onoff').Gpio;
+var ir = new Gpio(4, 'in', 'both');
+
+function exit(){
+	ir.unexport();
+	process.exit();
+}
+
+ir.watch(function(err, value){
+	if(err) throw err;
+	console.log("IR Sensor: " + value);
+});
+
+process.on('SIGINT', exit);
+console.log('initialized...');
