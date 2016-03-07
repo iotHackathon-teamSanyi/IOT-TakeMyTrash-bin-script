@@ -35,6 +35,7 @@ ir.watch(function(err, value) {
         var currentTime = Date.now();
         if (currentTime > lastTime + 500) { //repeat time
             counter++;
+	    console.log(counter);
             debounce(1000, function() { //wait after last drop
                 sendTrashCount(counter);
             });
@@ -44,6 +45,7 @@ ir.watch(function(err, value) {
 });
 
 function sendTrashCount(counter) {
+    console.log("Data sent to the server.");
     var optionsget = {
         host: 'sanyiubuntu.westeurope.cloudapp.azure.com',
         port: 80,
@@ -88,4 +90,4 @@ process.on('SIGINT', function() {
 
 //INITIALIZE
 theRealSlimShady();
-console.log('initialized...');
+console.log('Server initialized...');
