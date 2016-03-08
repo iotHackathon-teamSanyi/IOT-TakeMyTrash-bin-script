@@ -28,7 +28,7 @@
 			var ret = JSON.parse(count);
                     document.getElementById("counter").innerHTML = ret.code;
 
-                    qrcode.makeCode('Your point is' + ret.code);
+                    qrcode.makeCode(ret.code);
                 });
 
         </script>

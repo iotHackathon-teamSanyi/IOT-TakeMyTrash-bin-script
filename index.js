@@ -46,10 +46,11 @@ ir.watch(function(err, value) {
 
 function sendTrashCount(counter) {
     console.log("Data sent to the server.");
+var trashId=1;
     var optionsget = {
         host: 'sanyiubuntu.westeurope.cloudapp.azure.com',
         port: 80,
-        path: '/trashevent/' + counter,
+        path: '/trashevent/' + counter + '/'+trashId,
         method: 'GET'
     };
 
@@ -57,6 +58,7 @@ function sendTrashCount(counter) {
         res.on('data', function(d) {
             const buff = new Buffer(d);
             var data = buff.toString();
+console.log(data);
             io.emit('msg', data);
         });
     });
