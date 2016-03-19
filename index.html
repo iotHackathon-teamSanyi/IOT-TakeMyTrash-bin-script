@@ -22,7 +22,7 @@
 
         <script type='text/javascript'>
                 var qrcode = new QRCode("qrcode");
-                var socket = io('192.168.1.186:3000');
+                var socket = io('169.254.104.124:3000');
 
                 socket.on('msg', function(count) {
 			var ret = JSON.parse(count);
@@ -34,4 +34,3 @@
         </script>
     </body>
 </html>
-

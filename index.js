@@ -11,7 +11,7 @@ var ir = new Gpio(4, 'in', 'both');
 //SOCKET IO VARIABLES
 var http = require('http');
 var fs = require('fs');
-var index = fs.readFileSync('index.html');
+var index = fs.readFileSync('index2.html');
 
 //SOCKET IO SERVER START HERE
 var app = http.createServer(function(req, res) {
@@ -36,8 +36,10 @@ ir.watch(function(err, value) {
         if (currentTime > lastTime + 500) { //repeat time
             counter++;
 	    console.log(counter);
-            debounce(1000, function() { //wait after last drop
+            debounce(3000, function() { //wait after last drop
                 sendTrashCount(counter);
+		counter=0;
+
             });
             lastTime = currentTime;
         }
@@ -48,7 +50,7 @@ function sendTrashCount(counter) {
     console.log("Data sent to the server.");
 var trashId=1;
     var optionsget = {
-        host: 'sanyiubuntu.westeurope.cloudapp.azure.com',
+        host: 'takemytrash.westeurope.cloudapp.azure.com',
         port: 80,
         path: '/trashevent/' + counter + '/'+trashId,
         method: 'GET'
@@ -58,7 +60,7 @@ var trashId=1;
         res.on('data', function(d) {
             const buff = new Buffer(d);
             var data = buff.toString();
-console.log(data);
+	console.log(data);
             io.emit('msg', data);
         });
     });
@@ -70,7 +72,7 @@ console.log(data);
 
 //SEND MY ID TO THE SERVER
 function theRealSlimShady() {
-	var myIp = "192.168.1.186";
+	var myIp = "169.254.104.124";
 	var myPort = "3000";
 	isReady = true;
 }

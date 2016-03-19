@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <style type="text/css">
+            #qrcode {
+                width:256px;
+                height:256px;
+                
+                margin:0 auto;
+            } 
+
+            body {
+              padding-top: 50px;
+              background-color:#ededed;
+            }
+
+            .starter-template {
+              padding: 140px 15px;
+              text-align: center;
+            }
+
+            .navbar
+            {
+                background: #a1d66a;
+                border-bottom:none;
+            }
+
+            .navbar-inverse .navbar-brand
+            {
+                color: white;
+                font-size: 26px;
+            }
+            .card
+            {
+                border: 1px solid #DADADA;
+                padding-bottom: 20px;
+                background: white;
+                box-shadow: 2px 2px 11px -2px grey;
+margin-top:30px;
+            }
+
+	#ad-container img {
+                max-width: 100%;
+                padding-top: 15px;
+                margin-bottom: 0;
+            }
+        </style>
+    </head>
+    <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" >TakeMyTrash</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+
+      <div class="starter-template">
+        <div class="col-sm-6 col-sm-offset-3 card" id="card1">
+            <h1 style="margin-bottom: 40px;">Scan QR code with your app</h1>
+            
+            <div id="qrcode"></div>
+            <h1 id="counter" style="margin-top:40px;">0 points</h1>
+        </div>
+	<div class="col-sm-6 col-sm-offset-3 card" id="ad-container"></div>
+      </div>
+
+    </div>
+
+
+        <script src="http://davidshimjs.github.com/qrcodejs/qrcode.min.js" type="text/javascript"></script>
+        <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+	<script   src="https://code.jquery.com/jquery-2.2.2.min.js"   integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI="   crossorigin="anonymous"></script>
+        
+	<script type='text/javascript'>
+            var qrcode = new QRCode("qrcode");
+            var socket = io('152.66.172.156:3000');
+		var timeoutcard1;
+            socket.on('msg', function(count) {
+		    var ret = JSON.parse(count);
+			if (ret.trashcount==0){
+				$('#card1').hide();
+			}
+else
+{
+		$('#card1').show();
+		clearTimeout(timeoutcard1);
+                    document.getElementById("counter").innerHTML = ret.trashcount + " points";
+                    console.log(ret);
+                    qrcode.makeCode(ret.code);
+		timeoutcard1 = setTimeout(function(){
+			$('#card1').hide();
+		}
+			
+		,30000);
+}
+                });
+
+
+            setInterval(function(){
+                $.get( "http://takemytrash.westeurope.cloudapp.azure.com/ad", function( data ) {
+                  $( "#ad-container" ).html("<img src='http://takemytrash.westeurope.cloudapp.azure.com"+ data.url +"'>");
+                });
+            },3000);
+        </script>
+    </body>
+</html>
+
+
